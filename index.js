@@ -69,13 +69,30 @@ const cdIntoNewApp = () => {
 };
 
 const installPackages = () => {
-  return new Promise(resolve => {
-    console.log(colors.cyan("\nInstalling node-sass, prop-types, terra-aggregate-translations, terra-base, react-intl \n"))
-    shell.exec(`yarn add -D node-sass terra-aggregate-translations && yarn add terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
-      console.log(colors.green("\nFinished installing packages\n"))
-      resolve()
+  /**
+   * Determine if we should use npm or yarn to install these
+   */
+  if (fs.existsSync('yarn.lock')) {
+    return new Promise(resolve => {
+      console.log(colors.cyan("\nInstalling node-sass, prop-types, terra-aggregate-translations, terra-base, react-intl \n"))
+      shell.exec(`yarn add -D node-sass terra-aggregate-translations`, () => {
+        shell.exec(`yarn add terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
+          console.log(colors.green("\nFinished installing packages\n"))
+          resolve()
+        });
+      });
     });
-  });
+  } else {
+    return new Promise(resolve => {
+      console.log(colors.cyan("\nInstalling node-sass, prop-types, terra-aggregate-translations, terra-base, react-intl \n"))
+      shell.exec(`npm install -D node-sass terra-aggregate-translations`, () => {
+        shell.exec(`npm install terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
+          console.log(colors.green("\nFinished installing packages\n"))
+          resolve()
+        });
+      });
+    });
+  }
 };
 
 const updateTemplates = () => {
