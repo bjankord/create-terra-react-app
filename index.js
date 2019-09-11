@@ -32,7 +32,8 @@ const run = async () => {
     return false;
   }
   await cdIntoNewApp();
-  await installPackages();
+  await installDevDependencyPackages();
+  await installDependencyPackages();
   await updateTemplates();
   await modifyTemplates();
   await amendGitChanges();
@@ -68,28 +69,47 @@ const cdIntoNewApp = () => {
   });
 };
 
-const installPackages = () => {
+const installDevDependencyPackages = () => {
   /**
    * Determine if we should use npm or yarn to install these
    */
   if (fs.existsSync('yarn.lock')) {
     return new Promise(resolve => {
-      console.log(colors.cyan("\nInstalling node-sass, prop-types, terra-aggregate-translations, terra-base, react-intl \n"))
+      console.log(colors.cyan("\nInstalling node-sass terra-aggregate-translations dev dependencies \n"))
       shell.exec(`yarn add -D node-sass terra-aggregate-translations`, () => {
-        shell.exec(`yarn add terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
-          console.log(colors.green("\nFinished installing packages\n"))
-          resolve()
-        });
+        console.log(colors.green("\nFinished installing dev dependency packages\n"))
+        resolve()
       });
     });
   } else {
     return new Promise(resolve => {
-      console.log(colors.cyan("\nInstalling node-sass, prop-types, terra-aggregate-translations, terra-base, react-intl \n"))
+      console.log(colors.cyan("\nInstalling node-sass terra-aggregate-translations dev dependencies \n"))
       shell.exec(`npm install -D node-sass terra-aggregate-translations`, () => {
-        shell.exec(`npm install terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
-          console.log(colors.green("\nFinished installing packages\n"))
-          resolve()
-        });
+        console.log(colors.green("\nFinished installing dev dependency packages\n"))
+        resolve()
+      });
+    });
+  }
+};
+
+const installDependencyPackages = () => {
+  /**
+   * Determine if we should use npm or yarn to install these
+   */
+  if (fs.existsSync('yarn.lock')) {
+    return new Promise(resolve => {
+      console.log(colors.cyan("\nInstalling prop-types, terra-base, react-intl dependencies  \n"))
+      shell.exec(`yarn add terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
+        console.log(colors.green("\nFinished installing dependency packages\n"))
+        resolve()
+      });
+    });
+  } else {
+    return new Promise(resolve => {
+      console.log(colors.cyan("\nInstalling prop-types, terra-base, react-intl dependencies \n"))
+      shell.exec(`npm install terra-base react-intl@^2.9.0 prop-types@^15.0.0`, () => {
+        console.log(colors.green("\nFinished installing dependency packages\n"))
+        resolve()
       });
     });
   }

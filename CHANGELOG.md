@@ -4,6 +4,11 @@ ChangeLog
 Unreleased
 ----------
 
+1.1.1 - (September 11, 2019)
+------------------
+### Changed
+* Update install to install devDependencies and dependencies as two distinct steps
+
 1.1.0 - (September 11, 2019)
 ------------------
 ### Changed
